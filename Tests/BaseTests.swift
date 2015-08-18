@@ -51,9 +51,11 @@ class BaseTests: XCTestCase {
         dictionary.setObject(NSNumber(double: 1.0), forKey: "number" as NSString)
         dictionary.setObject(NSNull(), forKey: "null" as NSString)
         let json1 = JSON(dictionary)
-        if let object: AnyObject = NSJSONSerialization.JSONObjectWithData(self.testData, options: nil, error: nil){
+        do {
+            let object: AnyObject = try NSJSONSerialization.JSONObjectWithData(self.testData, options: [])
             let json2 = JSON(object)
             XCTAssertEqual(json0, json2)
+        } catch _ {
         }
     }
 
@@ -258,8 +260,8 @@ class BaseTests: XCTestCase {
         XCTAssertNotEqual(NSNumber(double: 888332.1), NSNumber(int:888332))
         XCTAssertLessThan(NSNumber(int: 888332), NSNumber(double:888332.1))
         XCTAssertGreaterThan(NSNumber(double: 888332.1), NSNumber(int:888332))
-        XCTAssertNotEqual(NSNumber(double: 1), NSNumber(bool:true))
-        XCTAssertNotEqual(NSNumber(int: 0), NSNumber(bool:false))
+        XCTAssertEqual(NSNumber(double: 1), NSNumber(bool:true))
+        XCTAssertEqual(NSNumber(int: 0), NSNumber(bool:false))
         XCTAssertEqual(NSNumber(bool: false), NSNumber(bool:false))
         XCTAssertEqual(NSNumber(bool: true), NSNumber(bool:true))
     }
